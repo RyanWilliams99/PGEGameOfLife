@@ -24,25 +24,28 @@ class PGEGameOfLife : public olc::PixelGameEngine
 	{
 		int liveMembers = 0;
 
-		if (gol[x + 1][y] == 1)
+		if (gol[x][y + 1] == 1) //N
 			liveMembers += 1;
 
-		if (gol[x + 1][y - 1] == 1)
+		if (gol[x + 1][y + 1] == 1) //NE
 			liveMembers += 1;
 
-		if (gol[x][y - 1] == 1)
+		if (gol[x + 1][y] == 1) //E
 			liveMembers += 1;
 
-		if (gol[x - 1][y - 1] == 1)
+		if (gol[x + 1][y - 1] == 1) //SE
 			liveMembers += 1;
 
-		if (gol[x - 1][y] == 1)
+		if (gol[x][y - 1] == 1) //S
 			liveMembers += 1;
 
-		if (gol[x - 1][y + 1] == 1)
+		if (gol[x - 1][y - 1] == 1) //SW
 			liveMembers += 1;
 
-		if (gol[x + 1][y + 1] == 1)
+		if (gol[x + 1][y] == 1) //W
+			liveMembers += 1;
+
+		if (gol[x - 1][y + 1] == 1) //NW
 			liveMembers += 1;
 
 		return liveMembers;
@@ -85,6 +88,10 @@ public:
 				{
 					Draw(x, y, olc::Pixel(olc::WHITE));
 				}
+				else
+				{
+					Draw(x, y, olc::Pixel(olc::BLACK));
+				}
 					
 			}
 				
@@ -94,14 +101,29 @@ public:
 		for (int x = 0; x < ScreenWidth(); x++)
 			for (int y = 0; y < ScreenHeight(); y++)
 			{
-				//Rule 1
-				if (IsAlive(x, y))
+				 
+				if (IsAlive(x, y)) //Live Cell
 				{
-					if (NumberOfLiveMembers(x, y) < 2)
-					gol[x][y] = 0; //die
-
-					std::cout << "killed a value at x - " << x << " y -  " << y << "\n";
-
+					if (NumberOfLiveMembers(x, y) < 2) //Rule 1
+					{
+						gol[x][y] = 0; //die
+					}
+					if (NumberOfLiveMembers(x, y) == 2 | 3) //Rule 2 
+					{
+						gol[x][y] = 1; //live
+					}
+					if (NumberOfLiveMembers(x, y) > 3) //Rule 3
+					{
+						gol[x][y] = 0; //die
+					}
+				
+				}
+				else
+				{
+					if (NumberOfLiveMembers(x, y) == 3) //Rule 3
+					{
+						gol[x][y] = 1; //live
+					}
 				}
 			}
 
