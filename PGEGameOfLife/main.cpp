@@ -1,6 +1,7 @@
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 
+using namespace std;
 
 int gol[256][240];
 
@@ -77,27 +78,8 @@ public:
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
+		Clear(olc::BLACK);
 		// called once per frame, draws random coloured pixels
-
-		//Actually Draw
-		for (int x = 0; x < ScreenWidth(); x++)
-		{
-			for (int y = 0; y < ScreenHeight(); y++)
-			{
-				if (gol[x][y] == 1)
-				{
-					Draw(x, y, olc::Pixel(olc::WHITE));
-				}
-				else
-				{
-					Draw(x, y, olc::Pixel(olc::BLACK));
-				}
-					
-			}
-				
-		}
-			
-
 		for (int x = 0; x < ScreenWidth(); x++)
 			for (int y = 0; y < ScreenHeight(); y++)
 			{
@@ -107,14 +89,25 @@ public:
 					if (NumberOfLiveMembers(x, y) < 2) //Rule 1
 					{
 						gol[x][y] = 0; //die
+						cout << "x - " << x << "y - " << y << " DIE - less than 2 members" << endl;
 					}
-					if (NumberOfLiveMembers(x, y) == 2 | 3) //Rule 2 
+					if (NumberOfLiveMembers(x, y) == 2) //Rule 2 
 					{
 						gol[x][y] = 1; //live
+						cout << "x - " << x << "y - " << y << " LIVE -  2 members so live" << endl;
+
+					}
+					if (NumberOfLiveMembers(x, y) == 3) //Rule 3 
+					{
+						gol[x][y] = 1; //live
+						cout << "x - " << x << "y - " << y << " LIVE -  3 members so live" << endl;
+
 					}
 					if (NumberOfLiveMembers(x, y) > 3) //Rule 3
 					{
 						gol[x][y] = 0; //die
+						cout << "x - " << x << "y - " << y << " DIE -  more than 3 members so die" << endl;
+
 					}
 				
 				}
@@ -123,7 +116,17 @@ public:
 					if (NumberOfLiveMembers(x, y) == 3) //Rule 3
 					{
 						gol[x][y] = 1; //live
+						cout << "x - " << x << "y - " << y << " LIVE dead but has 3 memebers" << endl;
+
 					}
+				}
+
+
+
+				//Actually Draw
+				if (gol[x][y] == 1)
+				{
+					Draw(x, y, olc::Pixel(olc::WHITE));
 				}
 			}
 
